@@ -9,6 +9,33 @@ export default function Home() {
   const [currentData, setcurrentData] = useState("");
   const [connected, setConnected] = useState(false);
 
+  const importToken = async () => {
+    const { ethereum } = window as any;
+    const tokenAddress = "0x28804f0C2C46B6aBd626CDE32bd2c75cB118b30a";
+    const tokenSymbol = "sh";
+    const tokenDecimal = 18;
+  
+    console.log("Attempting to import token...");
+  
+    try {
+      const wasAdded = await ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: tokenAddress,
+            symbol: tokenSymbol,
+            decimals: tokenDecimal,
+          },
+        },
+      });
+  
+      console.log("Token import status:", wasAdded);
+    } catch (error) {
+      console.error("Error importing token:", error);
+    }
+  };
+
   const connectWallet = async () => {
     try {
       const { ethereum } = window as any;
@@ -97,29 +124,8 @@ export default function Home() {
     }
   };
 
-  const importToken = async() => {
-    const {ethereum} = window as any;
-    const tokenAddress = "0x28804f0C2C46B6aBd626CDE32bd2c75cB118b30a";
-    const tokenSymbol = "shh";
-    const tokenDecimal = 18;
-
-    try{
-      const wasAdded = await ethereum.request({
-        method: "wallet_watchAsset",
-        params: {
-          type: "ERC20",
-          options: {
-            address: tokenAddress,
-            symbol: tokenSymbol,
-            decimals: tokenDecimal,
-          },
-        },
-      });
-    }
-    catch(error){
-      console.log(error);
-    }
-  };
+ 
+  
 
   return (
 
@@ -147,6 +153,18 @@ export default function Home() {
             {connected ? "Wallet is connected!" : "connect your wallet"}
           </button>
 
+          <button
+  onClick={importToken}
+  className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
+  style={{ marginBottom: '700px' }} // Adjust margin as needed
+>
+  Import Token
+</button>
+
+
+
+
+        
           <div className="fixed bottom-22 left-0 w-full flex flex-col items-center" style={{ marginTop: '100px' }}>
 
             
