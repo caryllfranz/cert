@@ -97,6 +97,30 @@ export default function Home() {
     }
   };
 
+  const importToken = async() => {
+    const {ethereum} = window as any;
+    const tokenAddress = "0x28804f0C2C46B6aBd626CDE32bd2c75cB118b30a";
+    const tokenSymbol = "shh";
+    const tokenDecimal = 18;
+
+    try{
+      const wasAdded = await ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: tokenAddress,
+            symbol: tokenSymbol,
+            decimals: tokenDecimal,
+          },
+        },
+      });
+    }
+    catch(error){
+      console.log(error);
+    }
+  };
+
   return (
 
     <main className="flex min-h-screen flex-col items-center justify-between p-24" style={{backgroundImage: "url('/bg.jpg')"}}>
