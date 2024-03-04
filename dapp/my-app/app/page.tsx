@@ -127,12 +127,12 @@ export default function Home() {
         </p>
   
         <div className="fixed bottom-0 left-0 w-full flex justify-center">
-          {/* Connect Wallet Button */}
+        
           <button onClick={connectWallet}>
             {connected ? "Wallet is connected!" : "Connect your wallet"}
           </button>
   
-          {/* Import Token Button */}
+          
           <button
             onClick={importToken}
             className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
@@ -164,7 +164,7 @@ export default function Home() {
             <MintCoinsForm mintingAmount={mintingAmount} setMintingAmount={setMintingAmount} />
           </div>
   
-          {/* Stake Section */}
+      
           <div className="fixed bottom-22 left-0 w-full flex flex-col items-center" style={{ marginTop: '100px' }}>
             <div style={{ marginRight: '110px', marginBottom: '20px' }}>
               <form>
@@ -187,8 +187,8 @@ export default function Home() {
             <StakeCoinsForm
               stakingAmount={stakingAmount}
               setStakingAmount={setStakingAmount}
-              onStakeAmountChange={stakeAmountChange} // Add this line
-              onStakeCoinClick={stakeCoin} // Add this line
+              onStakeAmountChange={stakeAmountChange} 
+              onStakeCoinClick={stakeCoin} 
             />
           </div>
   
