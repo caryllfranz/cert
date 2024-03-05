@@ -1,39 +1,31 @@
+
 "use client";
 import { BrowserProvider } from "ethers";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getContract } from "../config";
-import ConnectWalletButton from '../app/connect';
-import MintCoinsForm from '../app/mint'; 
-import StakeCoinsForm from '../app/stake';
-import WithdrawCoinsButton from '../app/withdraw'; 
-import mint from '../app/mint';
-import stake from '../app/stake';
-import withdraw from '../app/withdraw';
-
 
 export default function Home() {
+  const [walletKey, setwalletKey] = useState("");
+  const [currentData, setcurrentData] = useState("");
   const [connected, setConnected] = useState(false);
-  const [mintingAmount, setMintingAmount] = useState(""); 
-  const [stakingAmount, setStakingAmount] = useState("");
-  
 
-  // Function to handle wallet connection
   const connectWallet = async () => {
-    // Your wallet connection logic here
-    // Example: Requesting accounts from Metamask
     try {
       const { ethereum } = window as any;
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
       setwalletKey(accounts[0]);
-      setConnected(true); // Set connected to true upon successful connection
+      setConnected(true); // Update connected state
     } catch (error) {
       console.error("Error connecting wallet:", error);
-      setConnected(false); // Set connected to false upon connection failure
+      setConnected(false); // Update connected state in case of error
     }
   };
-  //<Minting>
+
+  
+
   const [mintingAmount, setMintingAmount] = useState<number>();
   const [submitted, setSubmitted] = useState(false);
   const [transactionHash, setTransactionHash] = useState("");
@@ -62,8 +54,7 @@ export default function Home() {
       setMintingAmount(0);
     }
   };
-  //</Minting>
- //<Staking>
+  
   const [stakingAmount, setStakingAmount] = useState<number>();
   const stakeCoin = async () => {
     const { ethereum } = window as any;
@@ -89,9 +80,9 @@ export default function Home() {
       setStakingAmount(0);
     }
   };
-  //</Staking>
+
  
-  //<Withdraw>
+ 
   const withdrawCoin = async () => {
     const { ethereum } = window as any;
     const provider = new BrowserProvider(ethereum);
@@ -108,8 +99,34 @@ export default function Home() {
     }
   };
 
- 
-  
+  const importToken = async () => {
+    const { ethereum } = window as any;
+    const tokenAddress = "0x28804f0C2C46B6aBd626CDE32bd2c75cB118b30a";
+    const tokenSymbol = "sh";
+    const tokenDecimal = 18;
+
+    console.log("Attempting to import token...");
+
+    try {
+      const wasAdded = await ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: tokenAddress,
+            symbol: tokenSymbol,
+            decimals: tokenDecimal,
+          },
+        },
+      });
+
+      console.log("Token import status:", wasAdded);
+    } catch (error) {
+      console.error("Error importing token:", error);
+    }
+  };
+
+
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24" style={{backgroundImage: "url('/bg.jpg')"}}>
@@ -128,21 +145,20 @@ export default function Home() {
   
         <div className="fixed bottom-0 left-0 w-full flex justify-center">
         
-          <button onClick={connectWallet}>
-            {connected ? "Wallet is connected!" : "Connect your wallet"}
-          </button>
+          
 
           <button
             onClick={connectWallet}
             className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
-            style={{ marginBottom: '700px' }} // Adjust margin as needed
+            style={{ marginBottom: '700px' }} 
           >
             {connected ? "Wallet is connected!" : "connect your wallet"}
           </button>
 
+
+
           <div className="fixed bottom-22 left-0 w-full flex flex-col items-center" style={{ marginTop: '100px' }}>
 
-            
 
   <div style={{ marginRight: '50px', marginBottom: '50px' }}>
   <form>
@@ -164,7 +180,7 @@ export default function Home() {
   </button>
 </div>
 
-  {/* Staking Section */}
+  
   <div style={{ marginRight: '110px', marginBottom: '20px' }}>
     <form>
       <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>Input Amount To Stake</label><br/>
@@ -183,7 +199,7 @@ export default function Home() {
     </button>
   </div>
 
-  {/* Withdraw Section */}
+  
   <div>
     <button
       onClick={withdrawCoin}
@@ -193,6 +209,15 @@ export default function Home() {
     </button>
   </div>
 </div>
+
+
+<button
+  onClick={importToken}
+  className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
+  style={{ marginBottom: '700px' }} 
+>
+  Import Token
+</button>
 
 
     
