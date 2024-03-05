@@ -76,41 +76,51 @@ export default function Home() {
   
 
   const stakeCoin = async () => {
-    // Your staking logic here
+    const { ethereum } = window as any;
+    const provider = new BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const contract = getContract(signer);
+    try {
+      const tx = await contract.stake(stakingAmount);
+      await tx.wait();
+      setSubmitted(true);
+      setTransactionHash(tx.hash);
+    } catch (e: any) {
+      const decodedError = contract.interface.parseError(e.data);
+      alert(`Minting failed: ${decodedError?.args}`);
+    }
+  };
+  const stakeAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (!isNaN(Number(inputValue))) {
+      setStakingAmount(Number(inputValue));
+      console.log(inputValue);
+    } else {
+      setStakingAmount(0);
+    }
+  };
+  //</Staking>
+ 
+  //<Withdraw>
+  const withdrawCoin = async () => {
+    const { ethereum } = window as any;
+    const provider = new BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    const contract = getContract(signer);
+    try {
+      const tx = await contract.withdraw();
+      await tx.wait();
+      setSubmitted(true);
+      setTransactionHash(tx.hash);
+    } catch (e: any) {
+      const decodedError = contract.interface.parseError(e.data);
+      alert(`Minting failed: ${decodedError?.args}`);
+    }
   };
 
-  // Define the stakeAmountChange function
-  const stakeAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStakingAmount(event.target.value); // Update stakingAmount state with input value
-  };
-
-  interface StakeCoinsFormProps {
-    stakingAmount: string;
-    setStakingAmount: React.Dispatch<React.SetStateAction<string>>;
-    onStakeAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onStakeCoinClick: () => void;
-  }
+ 
   
-  const StakeCoinsForm: React.FC<StakeCoinsFormProps> = ({
-    stakingAmount,
-    setStakingAmount,
-    onStakeAmountChange,
-    onStakeCoinClick,
-  }) => {
 
-    
-  const handleStakingAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStakingAmount(event.target.value);
-  };
-
-  const stakeCoin = () => {
-    
-  };
-
-  const withdrawCoin = async () => { 
-  };
-  
-  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24" style={{backgroundImage: "url('/bg.jpg')"}}>
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -131,17 +141,19 @@ export default function Home() {
           <button onClick={connectWallet}>
             {connected ? "Wallet is connected!" : "Connect your wallet"}
           </button>
-  
-          
+
           <button
-            onClick={importToken}
-            className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
-            style={{ marginBottom: '700px' }}
-          >
-            Import Token
-          </button>
-  
-          {/* Minting Section */}
+  onClick={importToken}
+  className="text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-pink-300 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 font-Poppins"
+  style={{ marginBottom: '700px' }} // Adjust margin as needed
+>
+  Import Token
+</button>
+
+
+
+
+        
           <div className="fixed bottom-22 left-0 w-full flex flex-col items-center" style={{ marginTop: '100px' }}>
             <div style={{ marginRight: '50px', marginBottom: '50px' }}>
               <form>
