@@ -156,7 +156,6 @@ export default function Home() {
           </button>
 
 
-
           <div className="fixed bottom-22 left-0 w-full flex flex-col items-center" style={{ marginTop: '100px' }}>
 
 
